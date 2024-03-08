@@ -1,0 +1,121 @@
+
+---
+title: "Week 9 Lab Questions"
+output: pdf_document
+---
+
+### K-Means Clustering
+
+#### Dataset 1 for K-means Clustering
+
+#### Chatterjee-Price Attitude Data attitude from the datasets package. The dataset is a survey of clerical employees of a large financial organization. The data are aggregated from questionnaires of approximately 35 employees for each of 30 (randomly selected) departments. The numbers give the percent proportion of favourable responses to seven questions in each department. For more details, see ?attitude.
+
+#### In this exercise, we’ll take a subset of the attitude dataset and consider only two variables privileges and learning, that is we would like to cluster the attitude dataset with the responses from all 30 departments when it comes to privileges and learning. The subset is defined as follows:
+
+```{r}
+library(datasets)
+dat <- attitude[,c(3,4)]
+```
+
+#### 1)	Plot the dataset dat.
+```{r}
+
+```
+
+#### 2)	Let k = 2 and nstart = 1. Set a seed and then perform the k-means clustering based on the two parameters. 
+```{r}
+
+```
+
+#### 3)	Report the tot.withinss.
+```{r}
+
+```
+
+#### 4)	Plot the two clusters with two different colours.
+```{r}
+
+```
+
+#### 5)	Let nstart = 100 and repeat 2)-4). Compare the two tot.withinss. 
+```{r}
+
+```
+
+
+#### 6)	Write a for-loop to record the tot.withinss when k is 1 to 15. Plot the result.
+```{r}
+
+```
+
+#### 7)	Use Elbow method to identify the best k. 
+```{r}
+
+```
+
+#### 8)	Plot the k clusters with the best k you get in 7).
+
+```{r}
+
+```
+\newpage
+### Hierarchical Clustering
+
+#### Dataset 2 for Hierarchical Clustering
+
+#### On the book website, http://www-bcf.usc.edu/~gareth/ISL/data.html, there is a gene expression data set (Ch10Ex11.csv) that consists of 40 tissue samples (40 columns) with measurements on 1,000 genes (1000 rows). The first 20 samples are from healthy patients, while the second 20 are from a diseased group.
+
+Please download the dataset from Moodle and load in the Ch10Ex11.csv file.
+```{r, eval=FALSE}
+DF <- read.csv(".../Ch10Ex11.csv", header=FALSE)
+```
+
+
+#### 9)	Read the description of the dataset again. Do you think the current layout of the dataset is a natural way to present the relationship between tissue samples (as columns) and genes (as rows)? Note each tissue may contain hundreds of genes. If not, transform the dataset in a more natural way. 
+
+```{r}
+
+```
+
+#### 10)	Calculate the dissimilarity metric. 
+
+```{r}
+
+```
+
+#### 11)	Apply hierarchical clustering to the samples using correlation based distance for
+
+##### a.	Complete linkage
+```{r}
+
+```
+
+##### b.	Average linkage
+```{r}
+
+```
+
+##### c.	Single linkage
+```{r}
+
+```
+
+##### d.	Centroid linkage
+```{r}
+
+```
+
+#### 12)	Plot the four dendrograms in the same plot by using `par(mfrow=c(i,j))`, where i is the number of rows and j is the number of columns in the plot. 
+
+```{r}
+
+```
+
+#### 13)	Do the genes separate the samples into the two groups? To answer this question, we need to generate a confusion matrix on the predicted and true number of healthy/diseased patients. 
+
+```{r}
+
+```
+
+#### 14)	Do your results depend on the type of linkage used?
+

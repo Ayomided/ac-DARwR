@@ -1,0 +1,121 @@
+---
+title: "Week 4 Lab Solutions"
+output:
+  pdf_document: default
+---
+To load the data:
+```{r}
+#install.packages("aod")
+library(aod)
+mydata <- read.csv("https://stats.idre.ucla.edu/stat/data/binary.csv")
+#mydata <- read.csv("D:/binary.csv")
+head(mydata)
+```
+
+#### 1)	Get basic descriptives for the entire data set using `summary()`. View the dataset using `View()`. Get the binary values of class label admit using 'mydata$admit'.
+```{r}
+summary(mydata)
+View(mydata)
+mydata$admit
+```
+
+#### 2)	How many observations are there in this dataset? 
+```{r}
+nrow(mydata)
+```
+
+#### 3)	Get the standard deviations. Hint: use sapply to apply the sd function to each variable in the dataset: `sapply(mydata, sd)`. Now get the mean for the first three variables (i.e., `admit`, `gre` and `gpa`) in a similar way.
+```{r}
+sapply(mydata, sd)
+sapply(mydata[,-4], mean)
+```
+`mydata[,-4]` indicates all the rows and all the columns except for the 4th column (the `rank`). We exclude rank as it is a categorical variable and calculating its mean is not appropriate.  
+
+#### 4)	Convert `rank` to a factor to indicate that rank should be treated as a categorical variable. 
+```{r}
+mydata$rank <- factor(mydata$rank)
+mydata$rank
+```
+
+#### 5)	Estimate a logistic regression model using the `glm` function, and get the results using the `summary` command. 
+```{r}
+glm.admit.fit <- glm(admit ~ gre + gpa + rank, 
+                     data = mydata, 
+                     family = "binomial"
+                     )
+summary(glm.admit.fit)
+```
+
+#### 6)	Do you notice variable `rank` is replaced with categorical variables `rank2`, `rank3`, and `rank4` that can only take values of 0 or 1? Recall that the original variable `rank` can take values of 1, 2, 3, or 4. Why isn't a variable `rank1` needed? If rank is 1, what are the values of `rank2`, `rank3` and `rank4`?
+
+If `rank` is 1, then `rank2` is 0, `rank3` is 0 and `rank4` is 0.
+
+If `rank` is 2, then `rank2` is 1, `rank3` and `rank4` are 0.
+
+If `rank` is 3, then `rank2` is 0, `rank3` is 1 and `rank4` is 0.
+
+If `rank` is 4, then `rank2` and `rank3` are 0 and `rank4` is 1.
+
+
+#### 7)	From the z-statistics and p-values of the variables, report which variables are statistically significant. 
+
+The z-statistics of all the variables are large and the p-values of all the variables are small (<0.05). All the variables are statistically significant.
+
+
+#### 8)	Use the model to predict the training dataset and store the results to a vector of probabilities `admit.prob`.
+```{r}
+admit.prob <- predict(glm.admit.fit, type = "response")
+head(admit.prob)
+```
+Note that this is a vector of probabilities. `admit` in the original dataset has values 0 or 1 (0 for reject and 1 for admitted).
+
+#### 9)	Create another vector `admit.pred` to show 0 or 1 for `admit.prob`. Let's set the value to be 0 if the probability is less than 0.5, and 1 if the probability is no less than 0.5.
+```{r}
+admit.pred <- rep(1,400)
+admit.pred[admit.prob<0.5] <- 0
+head(admit.pred)
+```
+
+#### 10)	Using `table()` function to create a confusion matrix to determine how many observations were correctly or incorrectly classified. Calculate the percentage that the observations were correctly classified.
+```{r}
+table(admit.pred, mydata$admit)
+mean(admit.pred == mydata$admit)
+```
+
+#### 11)	Use the model to predict the average cases in each rank, that is, four new data with (mean gre), (mean gpa) and (rank from 1 to 4). 
+```{r}
+newdata1 <- with(mydata, 
+                 data.frame(gre = mean(gre), 
+                            gpa = mean(gpa), 
+                            rank = factor(1:4)
+                            )
+                 )
+newdata1
+newdata1$admit1.prob <- predict(glm.admit.fit, 
+                                newdata = newdata1, 
+                                type = "response"
+                                )
+newdata1
+newdata1$admit1.pred <- rep(1,4)
+newdata1$admit1.pred[newdata1$admit1.prob<0.5] <- 0
+newdata1
+```
+
+Note that the above commands add two new columns to newdata1.
+
+Or alternatively, we can use
+```{r}
+newdata2 <- data.frame(gre = mean(mydata$gre), gpa = mean(mydata$gpa), rank = factor(1:4))
+newdata2$admit1.prob <- predict(glm.admit.fit, newdata = newdata2, type = "response")
+newdata2
+newdata2$admit1.pred <- rep(1,4)
+newdata2$admit1.pred[newdata2$admit1.prob<0.5] <- 0
+```
+
+`with(data, expression)` applies an expression to a dataset.
+
+
+For more exercises and more detailed explanations, please refer to https://stats.idre.ucla.edu/r/dae/logit-regression/.
+
+
+

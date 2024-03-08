@@ -1,0 +1,128 @@
+---
+title: "Week 2 Lab"
+output: pdf_document
+---
+ 
+# Question 1
+
+# Use the sample of following observations of variable x to find the values below.
+```{r}
+
+
+```
+
+# a. n (number of observations)
+```{r}
+
+
+```
+ 
+# b. sum of all the observations
+```{r}
+
+
+```
+
+# c. mean
+```{r}
+
+
+```
+
+# d. median
+```{r}
+
+
+```
+
+# e. mode
+```{r}
+
+
+
+```
+
+# f. five number summary -  Min, Q1, Median, Q3, Max
+```{r}
+
+
+```
+
+# g. $s^2$ (variance)
+```{r}
+
+
+```
+
+# h. s (standard deviation)
+```{r}
+
+
+```
+
+
+# Question 2
+
+# Create a vector y of random normal variables. Let y be of length 10, with the same mean as x, and standard deviation 1.
+```{r}
+
+
+```
+
+# a.	Calculate the covariance and correlation between x and y. Can you do that? Why or why not?
+```{r}
+
+
+```
+
+# b.	Now change your y so that it has the same length as x. The mean and standard deviation stay the same. Calculate the covariance and correlation between x and y again.
+```{r}
+
+
+```
+
+#c. Repeat b. several times. Did you get the same result every time? If not, why? What can you do make your result repeatable?
+
+Answer:
+
+# d. Now pick an integer, say, 63. Run set.seed(63) before the rnorm function. Repeat the two functions for several times and check whether you get the same results from rnorm every time. 
+```{r}
+
+
+```
+
+
+# Question 3.	
+
+# In this question, always set seed to be 100. 
+
+# a. Create z of random normal variables of length 20, mean 8 and SD 1. Plot the scatter plot of x and z. Add the main label, x-label and z-label. 
+```{r}
+
+
+```
+
+
+# b. Change the SD of z to 10 and obtain a new vector u. Plot the corresponding x and u. Draw the points onto the same plot as in 3a, and change the colour and symbol of the points.
+```{r}
+
+
+```
+
+
+# Questin 4:	
+
+# Explore yourself how to plot a boxplot in R. 
+
+# a.	Plot vector x in boxplot. 
+```{r}
+
+
+```
+
+# b.	Plot vector x and y in boxplot and display the result in one plot. See if you can add a label under each boxplot, and add some colour to each box.
+```{r}
+
+
+```
+

@@ -1,0 +1,166 @@
+---
+title: "Week 2 Lab Solutions"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+### 1.	Use the sample of following observations of variable x to find the values below.
+  10, 2, 15, 6, 4, 9, 12, 11, 3, 0, 12, 10, 9, 7, 11, 10, 8, 5, 10, 6
+```{r}
+x <- c(10, 2, 15, 6, 4, 9, 12, 11, 3, 0, 12, 10, 9, 7, 11, 10, 8, 5, 10, 6)
+```
+#### a.  n (number of observations)
+```{r}
+length(x)
+```
+#### b.  sum of all the observations
+```{r}
+sum(x)
+```
+#### c.  mean
+```{r}
+mean(x)
+```
+#### d. median
+```{r}
+median(x)
+```
+#### e. mode
+```{r}
+#sort(x): by default increasing
+#table(x): create a contingency table that displays the frequency distribution of the variable.
+#sort(-table(x))
+names(sort(-table(x)))[1]
+```
+#### f.	five number summary -  Min, Q1, Median, Q3, Max
+```{r}
+summary(x)
+```
+#### g.	$s^2$ (variance)
+```{r}
+var(x)
+```
+Note that this is unbiased sample variance.
+
+#### h.	s (standard deviation)
+```{r}
+sd(x)
+```
+Note that this is unbiased sample standard deviation.
+
+### 2.	Create a vector y of random normal variables. Let y be of length 10, with the same mean as x, and standard deviation 1.
+```{r}
+y <- rnorm(10, mean(x), 1)
+```
+#### a.	Calculate the covariance and correlation between x and y. Can you do that? Why or why not?
+```{r}
+#cor(x,y)
+```
+Error in cor(x, y) : incompatible dimensions. x and y should have the same length.
+
+#### b.	Now change your y so that it has the same length as x. The mean and standard deviation stay the same. Calculate the covariance and correlation between x and y again. 
+```{r}
+y <- rnorm(20, mean(x), 1)
+cov(x,y)
+cor(x,y)
+```
+#### c.	Repeat b. several times. Did you get the same result every time? If not, why? What can you do make your result repeatable?
+
+No, because rnorm() is a random function. We need to set a seed to get repeatable results.
+
+#### d. Now pick an integer, say, 63. Run set.seed(63) before the rnorm function. Repeat the two functions for several times and check whether you get the same results from rnorm every time. 
+
+Yes.
+
+### 3.	In this question, always set seed to be 100. 
+#### a. Create z of random normal variables of length 20, mean 8 and SD 1. Plot the scatter plot of x and z. Add the main label, x-label and z-label. 
+
+```{r}
+set.seed(100)
+z <- rnorm(20,8,1)
+plot(z ~ x, 
+     main = "Scatter plot of x and z", 
+     xlab = "x", ylab = "z")
+```
+
+Note that the above plot is the same as 
+```{r}
+plot(x,z,
+     main = "Scatter plot of x and z", 
+     xlab = "x", ylab = "z")
+```
+
+#### b. Change the SD of z to 10 and obtain a new vector u. Plot the corresponding x and u. Draw the points onto the same plot as in 3a, and change the colour and symbol of the points. 
+```{r}
+plot(x,z,
+     main = "Scatter plot of x and z", 
+     xlab = "x", ylab= "z",
+     ylim = c(-10,40)) 
+#Why do we need to add ylim=c(-10,40)?
+set.seed(100)
+u <- rnorm(20,8,10)
+#points function adds points to the existing plot.
+points(x,u, col = "blue", pch = "+")
+```
+
+### 4.	Explore yourself how to plot a boxplot in R. 
+#### a.	Plot vector x in boxplot. 
+```{r}
+boxplot(x)
+```
+
+#### b.	Plot vector x and y in boxplot and display the result in one plot. See if you can add a label under each boxplot, and add some colour to each box.
+```{r}
+data <- data.frame(x,y)
+boxplot(data,
+        col = c("green","orange"),
+        main = "Boxplot for x and y")
+```
+Or alternatively,
+```{r}
+boxplot(x,y,
+        col = c("green","orange"), 
+        names = c("Green X", "Orange Y"), 
+        main = "Boxplot for x and y")
+```
+
+Notice that, if it is a data frame, the boxplot will automatically show their names x and y.
+
+### 5. Given a dataset (see below) including 10 observations ($S_1$, ..., $S_{10}$) about the humidity degree (i.e. high or normal) for playing golf (i.e. yes or no), you are required to use the Bayes' rule to calculate the probability of playing golf according to the humidity degree, i.e. $P(\mathit{Play\ Golf} | \mathit{Humidity})$ by hand.
+
+
+|       | $S_1$ | $S_2$ | $S_3$ | $S_4$ | $S_5$ | $S_6$ | $S_7$ | $S_8$ | $S_9$ | $S_{10}$ |
+|-------|------|---------|--------|--------|--------|--------|--------|--------|--------|--------|
+|   Humidity |  high  |    high   |    high  | normal  |high  | normal  |normal  |high  |normal  |normal  |
+|   Play Golf  |  no |   yes   |  yes  | no  | yes  | yes  | no  |no  |no  |yes  |
+
+
+**Based on the dataset, we can calculate**
+
+P(Play Golf = yes) = 5/10 = 0.5
+
+P(Play Golf = no) = 5/10 = 0.5
+
+P(Humidity = high) = 5/10 = 0.5
+
+P(Humidity = normal) = 5/10 = 0.5
+
+P(Humidity = high | Play Golf = yes) = 3/5 = 0.6
+
+P(Humidity = normal | Play Golf = yes) = 2/5 = 0.4
+
+P(Humidity = high | Play Golf = no) = 2/5 = 0.4
+
+P(Humidity = normal | Play Golf = no) = 3/5 = 0.6
+
+
+**According to the Bayes' rule, we can calculate**
+
+P(Play Golf = yes | Humidity = high) = (0.6 * 0.5) / 0.5 = 0.6
+
+P(Play Golf = no | Humidity = high) = (0.4 * 0.5) / 0.5 = 0.4
+
+P(Play Golf = yes | Humidity = normal) = (0.4 * 0.5) / 0.5 = 0.4
+
+P(Play Golf = no | Humidity = normal) = (0.6 * 0.5) / 0.5 = 0.6

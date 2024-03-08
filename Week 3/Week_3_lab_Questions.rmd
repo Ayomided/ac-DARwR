@@ -1,0 +1,56 @@
+---
+title: "Week 3 Lab Questions"
+
+output: pdf_document
+---
+
+#### 1)	Use R to estimate the unknown parameters of the hypothesised model. Find the least squares estimates of the slope ${\hat\beta}_1$ and intercept ${\hat\beta}_0$ on the printout. Write down the least squares equation for this model.
+```{r}
+
+```
+
+#### 2)	Plot the dataset and the least squares line on the same figure.
+```{r, echo = TRUE}
+
+```
+
+#### 3)	How to interpret the slope ${\hat\beta}_1$ and y-intercept ${\hat\beta}_0$ of the least squares line?  
+
+
+
+#### 4)	Measuring the extent to which the model fits the data.
+
+##### a. What is the RSE of this model? How to interpret it?
+```{r}
+
+```
+ 
+##### b. What is the R-squared value? How to interpret it?
+
+
+#### 5)	Test the null hypothesis that ${\hat \beta}_1$ is 0. Find the t-value and p-value. What conclusions can you draw from the two values?
+
+
+#### 6)	Predict the value of damage for a new set of distances (distance = 0.5, 1.5, 2.5, 3.5). Can you obtain the above four new damages simultaneously?
+```{r}
+
+```
+
+#### 7)	Find the confidence interval for the prediction of damage for a new set of distance (distance = 0.5, 3, 5.5). 
+```{r}
+
+```
+
+#### 8)	Find the prediction interval for the prediction of damage for a new set of distance (distance = 0.5, 3, 5.5).
+```{r}
+
+```
+
+#### 9)	Compare your results in 7) and 8) and comment on the confidence intervals and prediction intervals. 
+
+
+
+#### 10) Plot the confidence intervals and prediction intervals in the same figure by using a new set of distance (distance=seq(0.75,6.0,length=51)).
+```{r}
+
+```

@@ -1,0 +1,95 @@
+---
+title: "Week 3 Lab Solutions"
+
+output: pdf_document
+---
+
+#### 1)	Use R to estimate the unknown parameters of the hypothesised model. Find the least squares estimates of the slope ${\hat\beta}_1$ and intercept ${\hat\beta}_0$ on the printout. Write down the least squares equation for this model.
+```{r}
+damage <- c(26.2, 17.8, 31.3, 23.1, 27.5, 36.0, 14.1, 22.3, 19.6, 31.3, 24.0, 17.3, 43.2, 36.4, 26.1)
+distance <- c(3.4, 1.8, 4.6, 2.3, 3.1, 5.5, 0.7, 3.0, 2.6, 4.3, 2.1, 1.1, 6.1, 4.8, 3.8)
+FireDam <- data.frame(damage, distance)
+lm.fit <- lm(damage ~ distance, FireDam)
+lm.fit
+```
+From the output, ${\hat\beta}_1=4.919$ and ${\hat\beta}_0=10.278$. As a result, the least squares equation is $$damage = 4.919*distance +10.278.$$
+
+#### 2)	Plot the dataset and the least squares line on the same figure.
+```{r, echo = TRUE}
+plot(distance, damage, 
+     xlab ="distance", ylab = "damage", 
+     main = "Plot of distance vs damage")
+abline(lm.fit)
+```
+
+#### 3)	How to interpret the slope ${\hat\beta}_1$ and y-intercept ${\hat\beta}_0$ of the least squares line?  
+${\hat\beta}_1 = 4.919$ implies that the estimated mean damage increases by \$4,919 for each additional mile from the fire station. Note that the interpretation is valid over the range of `distance`, or from 0.7 to 6.1 miles from the station.
+
+${\hat\beta}_0 = 10.278$ implies that a fire 0 miles from the fire station (the fire station itself caught fire!) has an estimated mean damage of \$10,278. Note that `distance = 0` is not in the range of `distance`, the intepretation could be meaningless.
+
+
+#### 4)	Measuring the extent to which the model fits the data.
+##### a. What is the RSE of this model? How to interpret it?
+```{r}
+summary(lm.fit)
+```
+RSE is 2.316. 
+
+This implies that any prediction on the observed fire damage (y) values based on the distance would be off by about 2.316 thousand dollars on average when using the least squares line. 
+
+##### b. What is the R-squared value? How to interpret it?
+Adjuested R-squared is 0.9176 (after correction).
+
+It implies that about 91.76% of the sample variation in fire `damage` (y) is explained by the `distance` (x) between the fire and the fire station.
+
+#### 5)	Test the null hypothesis that ${\hat \beta}_1$ is 0. Find the t-value and p-value. What conclusions can you draw from the two values?
+
+t-value = 12.525, p-value = 1.25e-08 
+
+t-value is large and p-value is small. We can conclude that ${\hat\beta}_1\neq 0$ and there is a (linear) relationship between fire damage and the distance from the nearest fire station.
+
+
+#### 6)	Predict the value of damage for a new set of distances (distance = 0.5, 1.5, 2.5, 3.5). Can you obtain the above four new damages simultaneously?
+```{r}
+predict(lm.fit, newdata = data.frame(distance = 0.5:3.5) )
+```
+
+
+#### 7)	Find the confidence interval for the prediction of damage for a new set of distance (distance = 0.5, 3, 5.5). 
+
+```{r}
+predict(lm.fit,
+        data.frame(distance=(c(0.5,3,5.5))),
+        interval="confidence")
+```
+
+#### 8)	Find the prediction interval for the prediction of damage for a new set of distance (distance = 0.5, 3, 5.5).
+```{r}
+predict(lm.fit,
+        data.frame(distance=(c(0.5,3,5.5))),
+        interval="prediction")
+```
+
+#### 9)	Compare your results in 7) and 8) and comment on the confidence intervals and prediction intervals. 
+Prediction intervals are always wider than confidence intervals.
+
+#### 10) Plot the confidence intervals and prediction intervals in the same figure by using a new set of distance (distance=seq(0.75,6.0,length=51)).
+```{r}
+plot(distance, damage, 
+     xlab="distance", ylab = "damage", 
+     main = "Confidence intervals and prediction intervals", 
+     ylim = c(10,50))
+abline(lm.fit)
+newDist  <- data.frame(distance=seq(0.75,6.0,length=51))
+p_conf <- predict(lm.fit, newDist, interval="confidence")
+p_pred <- predict(lm.fit, newDist, interval="prediction")
+lines(newDist$distance, p_conf[,"lwr"], col="red", type="b", pch="+")
+lines(newDist$distance, p_conf[,"upr"], col="red", type="b", pch="+")
+lines(newDist$distance, p_pred[,"upr"], col="blue", type="b", pch="*")
+lines(newDist$distance, p_pred[,"lwr"], col="blue", type="b", pch="*")
+legend("bottomright",
+       pch=c("+","*"),
+       col=c("red","blue"),
+       legend = c("confidence","prediction"))
+```
+

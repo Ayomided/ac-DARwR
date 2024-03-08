@@ -1,0 +1,43 @@
+---
+title: "Week 5 Lab Question Sheet"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#### 1) Load the wine quality training dataset (available on moodle). Look at the summary of the training dataset. 
+
+```{r, warning=F, message = F}
+
+```
+
+#### 2) Conduct 10-fold cross validation to obtain the average AUROC value by using alcohol as the only feature.
+
+```{r, warning=F, message = F}
+
+```
+
+#### 3) Conduct 10-fold cross validation to obtain the average AUROC value by using residual.sugar as the only feature.
+
+```{r, warning=F, message = F}
+
+```
+
+#### 4) Conduct 10-fold cross validation to obtain the average AUROC value by using alcohol and residual.sugar as features.
+
+```{r, warning=F, message = F}
+
+```
+
+#### 5) What conclusions can we make based on the comparisons between the AUROC values obtained by those different combinations of features?
+
+
+#### 6) Train three logistic regression classifiers by using the entire training dataset and different combinations of features. Evaluate the predictive accuracy of models by using the testing dataset (available on moodle).
+```{r, warning=F, message = F}
+
+```
+

@@ -1,0 +1,146 @@
+---
+title: "Week 5 Lab Solutions"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#### 1) Load the wine quality training dataset (available on moodle). Look at the summary of the training dataset.\
+$\vspace{0.5cm}$
+```{r, warning=F, message = T}
+# Load the training dataset.
+#training_data <- read.table(".../WineQuality_training.txt", header = TRUE, sep = ",") 
+#summary(training_data)
+```
+
+<br>
+#### 2) Conduct 10-fold cross validation to obtain the average AUROC value by using alcohol as the only feature.\
+
+```{r, warning=F, message = F}
+# Use package "caret" for running the k-fold CV.
+library(caret)
+library(ROCR)
+
+auc_value_alcohol<-as.numeric()
+set.seed(11) # Set the value of random seed.
+training_data[,3]<-as.factor(training_data[,3])
+folds <- createFolds(y=training_data[,3],k=10) # Allocate training instances into different folds.
+str(folds)
+# Conduct 10-fold CV.
+for(i in 1:10){
+    fold_cv_test <- training_data[folds[[i]],] 
+    fold_cv_train <- training_data[-folds[[i]],] 
+    trained_model_alcohol <- glm(quality  ~ alcohol, data = fold_cv_train, family = binomial)
+    pred_prob_alcohol <- predict(trained_model_alcohol, fold_cv_test, type='response')
+    pr_alcohol <- prediction(pred_prob_alcohol, fold_cv_test$quality)
+    auroc_alcohol <- performance(pr_alcohol, measure = "auc")
+    auroc_alcohol <- auroc_alcohol@y.values[[1]]
+    #print(auroc_alcohol)
+    auc_value_alcohol<- append(auc_value_alcohol,auroc_alcohol) 
+}
+print(auc_value_alcohol)
+print(mean(auc_value_alcohol)) 
+```
+
+#### 3) Conduct 10-fold cross validation to obtain the average AUROC value by using residual.sugar as the only feature.
+
+```{r, warning=F, message = F}
+auc_value_sugar<-as.numeric()
+
+for(i in 1:10){
+    fold_cv_test <- training_data[folds[[i]],] 
+    #print(dim(fold_cv_test))
+    fold_cv_train <- training_data[-folds[[i]],] 
+    #print(dim(fold_cv_train))
+    trained_model_sugar <- glm(quality  ~ residual.sugar, data = fold_cv_train, family = binomial)
+    pred_prob_sugar <- predict(trained_model_sugar, fold_cv_test, type='response')
+    pr_sugar <- prediction(pred_prob_sugar, fold_cv_test$quality)
+    auroc_sugar <- performance(pr_sugar, measure = "auc")
+    auroc_sugar <- auroc_sugar@y.values[[1]]
+    print(auroc_sugar)
+    auc_value_sugar<- append(auc_value_sugar,auroc_sugar)
+}
+
+print(mean(auc_value_sugar)) 
+```
+
+#### 4) Conduct 10-fold cross validation to obtain the average AUROC value by using alcohol and residual.sugar as features.
+
+```{r, warning=F, message = F}
+auc_value_alcohol_sugar<-as.numeric()
+
+for(i in 1:10){
+    fold_cv_test <- training_data[folds[[i]],] 
+    fold_cv_train <- training_data[-folds[[i]],] 
+    trained_model_alcohol_sugar <- glm(quality  ~ alcohol+residual.sugar, data = fold_cv_train, family = binomial)
+    pred_prob_alcohol_sugar <- predict(trained_model_alcohol_sugar, fold_cv_test, type='response')
+    pr_alcohol_sugar <- prediction(pred_prob_alcohol_sugar, fold_cv_test$quality)
+    auroc_alcohol_sugar <- performance(pr_alcohol_sugar, measure = "auc")
+    auroc_alcohol_sugar <- auroc_alcohol_sugar@y.values[[1]]
+    #print(auroc_alcohol_sugar)
+    auc_value_alcohol_sugar<- append(auc_value_alcohol_sugar,auroc_alcohol_sugar)
+}
+
+print(auc_value_alcohol_sugar)
+print(mean(auc_value_alcohol_sugar)) 
+```
+
+#### 5) What conclusions can we make based on the comparisons between the AUROC values obtained by those different combinations of features?
+
+According to the 10-fold CV results, the predictive power of alcohol is higher than residual.sugar. The combination of two features further improves the accuracy of the logistic regression model on predicting wine quality.
+\newpage
+#### 6) Train three logistic regression classifiers by using the entire training dataset and different combinations of features. Evaluate the predictive accuracy of models by using the testing dataset (available on moodle).
+
+```{r, warning=F, message = F}
+# Load the testing dataset.
+#testing_data <- read.table(".../WineQuality_testing.txt", header = TRUE, sep = ",")
+#testing_data[,3]<-as.factor(testing_data[,3])
+#dim(testing_data)
+
+# Train different classifiers using the entire training dataset.
+# Model_1 uses alcohol as the only feature.
+# Model_2 uses residual.sugar as the only feature.
+# Model_3 uses both alcohol and residual.sugar as the features.
+trained_model_1 <- glm(quality  ~ alcohol, data = training_data, family = binomial)
+trained_model_2 <- glm(quality  ~ residual.sugar, data = training_data, family = binomial) 
+trained_model_3 <- glm(quality  ~ alcohol+residual.sugar, data = training_data, family = binomial) 
+
+# Make predictions on testing instances by using different models.
+prediction_trained_model_1 <- predict(trained_model_1, testing_data, type='response')
+prediction_trained_model_2 <- predict(trained_model_2, testing_data, type='response')
+prediction_trained_model_3 <- predict(trained_model_3, testing_data, type='response')
+
+pr_trained_model_1 <- prediction(prediction_trained_model_1, testing_data$quality)
+pr_trained_model_2 <- prediction(prediction_trained_model_2, testing_data$quality)
+pr_trained_model_3 <- prediction(prediction_trained_model_3, testing_data$quality)
+
+# Calculate the AUROC values obtained by different models.
+auroc_trained_model_1 <- performance(pr_trained_model_1, measure = "auc")
+auroc_trained_model_2 <- performance(pr_trained_model_2, measure = "auc")
+auroc_trained_model_3 <- performance(pr_trained_model_3, measure = "auc")
+auroc_trained_model_value_1 <- auroc_trained_model_1@y.values[[1]]
+auroc_trained_model_value_2 <- auroc_trained_model_2@y.values[[1]]
+auroc_trained_model_value_3 <- auroc_trained_model_3@y.values[[1]]
+auroc_trained_model_value_1
+auroc_trained_model_value_2
+auroc_trained_model_value_3
+
+# Calculate TPR and FPR values obtained by different models.
+prf_trained_model_1 <- performance(pr_trained_model_1, measure = "tpr", x.measure = "fpr")
+prf_trained_model_2 <- performance(pr_trained_model_2, measure = "tpr", x.measure = "fpr")
+prf_trained_model_3 <- performance(pr_trained_model_3, measure = "tpr", x.measure = "fpr")
+
+# Draw ROC curves for different models.
+plot(prf_trained_model_1, col="blue")
+plot(prf_trained_model_2, col="orange", add=TRUE)
+plot(prf_trained_model_3, col="red", add=TRUE)
+legend(0.35,0.25, c(text=sprintf('AUROC(alcohol) = %s',round(auroc_trained_model_value_1, digits=3)),
+text=sprintf('AUROC(residual.sugar) = %s',round(auroc_trained_model_value_2, digits=3)),
+text=sprintf('AUROC(alcohol+residual.sugar) = %s',round(auroc_trained_model_value_3, digits=3))),
+lty=1, cex=0.9, col = c("blue", "orange", "red"), bty="n", y.intersp=1, inset=c(0.1,-0.15))
+```
+
