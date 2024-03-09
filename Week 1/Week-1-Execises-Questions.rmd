@@ -1,31 +1,88 @@
-Week 1 Exercises
+---
+title: Week 1 Exercises
+output:
+  pdf_document: default
+  html_document: default
+ 
+---
 
 **Vectors**
 
 **1. Create a vector u that has values -10, -9, -8, . . . ,0. How many
 different ways can you use?**
+```{r}
+u <- c(-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0)
+u <- c(-10:0)
+u <- seq(-10,0, by=1)
+print(u)
+```
+
 
 **2. Create another vector v that has values -0.1, 0.4, 0.9, 1.4, ., and
 there are 11 numbers (aka**
 
 **terms) in v. How many different ways can you use?**
+```{r}
+v <- seq(-0.1, by=0.5,length.out=11)
+print(v)
+```
 
 **3. Calculate the vector of u+v and u\*v.**
+```{r}
+u_v <- u+v
+u.v <- u/v
+print(u_v)
+print(u.v)
+```
+
 
 **4. Increase all terms in u by 1, and then take away 20% from all terms
 in v.**
+```{r}
+u_plus <- u+1
+v_20 <- v-0.2
+print(u_plus)
+print(v_20)
+```
+
 
 **5. Create a vector w that contains all the numbers from u and then v.
 Report the length of**
 
 **w.**
+```{r}
+w <- c(u,v)
+print(w)
+```
+
 
 **6. Use a command to return the 14th, 15th and 16th value of w. What
 about the 2nd, the**
 
 **5th, 9th and 21st value of w? What is the 23rd value?**
+```{r}
+w.5 <- w[5]
+w.9 <- w[9]
+w.14 <- w[14]
+w.15 <- w[15]
+w.16 <- w[16]
+w.21 <- w[21]
+w.23 <- w[23]
+print(w.5)
+print(w.9)
+print(w.14)
+print(w.15)
+print(w.16)
+print(w.21)
+print(w.23)
+```
+
 
 **7. Sort w in the descending order.**
+```{r}
+sort(w, decreasing = T)
+```
+
 
 **Matrices**
 
@@ -33,6 +90,15 @@ about the 2nd, the**
 Extract a sub-matrix**
 
 **from b_matrix named subB.**
+```{r}
+b_matrix <- matrix(seq(1,39, by=2), 4,5,
+                   byrow = T, 
+                   dimnames = list(c("A", "B", "C", "D"), 
+                                   c("a", "b", "c", "d", "e")))
+b_matrix
+subB <- b_matrix[c(1,2,4),c(2,3)]
+subB
+```
 
 \## a b c d e
 
@@ -46,8 +112,26 @@ Extract a sub-matrix**
 
 **2.** **Create three vectors x,y,z with integers and each vector has 3
 elements.** **Combine the**
+```{r}
+x <- c(1,2,3)
+y <- c(4,5,6)
+z <- c(7,8,9)
+x
+y
+z
+```
+
 
 **three vectors to become a** 3 *×* 3 **matrix A where each column
 represents a vector. Change the row names to a,b,c.**
+```{r}
+A <- cbind(x,y,z)
+rownames(A) <- c("a", "b", "c")
+colnames(A) <- c("A", "B", "C")
+A
 
-1
+B <- cbind(x,y,z)
+rownames(B) <- c("a", "b", "c")
+colnames(B) <- c("A", "B", "C")
+B
+```
